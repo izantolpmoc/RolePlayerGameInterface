@@ -1,12 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
-import java.util.Vector;
-import java.util.concurrent.TimeUnit;
 
 public class Map extends Item {
 
@@ -96,16 +91,14 @@ public class Map extends Item {
         this.map[x][y] = "\uD83D\uDC64";
         for (String[] row : map)
             result += Arrays.toString(row) + " \n";
-            //System.out.println(Arrays.toString(row));
         System.out.println(result);
-        //var area = new  JTextArea(result);
-        //area.setFont(new Font("Monospaced", Font.PLAIN, 18));
-        return  result;
+        return result;
     }
 
     //defines all the events the player can be confronted to and the actions he can perform in reaction
     public JPanel Action(Player player)
     {
+        //region layout
         actionPanel = new JPanel();
         actionPanel.setBounds(100, 100, 1050, 300);
         actionPanel.setBackground(Color.black);
@@ -120,15 +113,15 @@ public class Map extends Item {
         dialogContent.setLineWrap(true);
         dialogContent.setWrapStyleWord(true);
 
-
+        //makes sure interface is up-to-date
         if (sellPanel != null)
             actionPanel.remove(sellPanel);
 
         if (buyPanel != null)
             actionPanel.remove(buyPanel);
 
+        //Jscrollpane is used to make sure all text content is displayed to the user
         JScrollPane scroll = new JScrollPane(dialogContent, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        //scroll.setBounds(100, 100, 800, 200);
         scroll.setPreferredSize(new Dimension(800, 300));
         scroll.setVisible(true);
         actionPanel.add(scroll);
@@ -138,11 +131,12 @@ public class Map extends Item {
         buttonsPanel.setBackground(Color.red);
         buttonsPanel.setLayout(new GridLayout(6, 1));
 
-        //actionPanel.add(dialogContent);
         actionPanel.add(buttonsPanel);
         dialogContent.setVisible(true);
         actionPanel.setVisible(true);
         buttonsPanel.setVisible(true);
+        //end region
+
         String dialog;
 
         switch(playerPos) {
@@ -188,7 +182,6 @@ public class Map extends Item {
 
                 dialog += "Que faites vous ?";
                 dialogContent.setText(dialog);
-
 
                 btn1= new JButton("Attaquer avec l'arme");
                 btn1.setBackground(Color.black);
@@ -262,7 +255,7 @@ public class Map extends Item {
                 btn1.setFont(new Font("Monospaced", Font.PLAIN, 18));
                 buttonsPanel.add(btn1);
                 btn1.addActionListener(e -> {
-                    //hidePanel(dialogContent, actionPanel, buttonsPanel);
+                    //hides current display and shows seller's inventory
                     actionPanel.setVisible(false);
                     scroll.setVisible(false);
                     dialogContent.setVisible(false);
@@ -280,7 +273,7 @@ public class Map extends Item {
                 btn2.setFont(new Font("Monospaced", Font.PLAIN, 18));
                 buttonsPanel.add(btn2);
                 btn2.addActionListener(e -> {
-                    //hidePanel(dialogContent, actionPanel, buttonsPanel);
+                    //hides current display and shows player's inventory
                     actionPanel.setVisible(false);
                     scroll.setVisible(false);
                     dialogContent.setVisible(false);
@@ -327,6 +320,7 @@ public class Map extends Item {
 
                 break;
 
+            //End of the game
             case 9:
                 if(player.Money >= 50) {
                     dialog = "Vous apercevez au loin un chauffeur, Yvan avait raison !\n";
@@ -343,7 +337,6 @@ public class Map extends Item {
                     dialogContent.setText(dialog);
 
                 }
-
                 btn1= new JButton("Fin");
                 btn1.setBackground(Color.black);
                 btn1.setForeground(Color.white);
@@ -355,6 +348,7 @@ public class Map extends Item {
         return actionPanel;
     }
 
+    //All actions related to fighting return a string that can be displayed in the dialog panel
     private void fight(Player player, Obstacle obstacle, Item newItem) {
         String text = "";
 
@@ -436,6 +430,7 @@ public class Map extends Item {
         actionPanel.setVisible(true);
     }
 
+    //This method is only used when player does not receive an item as a reward
     private void fight(Player player, Monster monster) {
         String text = "";
 
@@ -457,7 +452,8 @@ public class Map extends Item {
         if(btn2 != null)
             buttonsPanel.remove(btn2);
         if(btn3 != null)
-            buttonsPanel.remove(btn3);
+            btn3.setVisible(false);
+            //buttonsPanel.remove(btn3);
 
         dialogContent.setAutoscrolls(true);
         dialogContent.setText(text);
@@ -476,6 +472,7 @@ public class Map extends Item {
         actionPanel.setVisible(true);
     }
 
+    //Method used to hide the current interface and show the menu where the user can choose a new action
     private void hidePanel(JTextArea dialogContent, JPanel actionPanel, JPanel buttonsPanel) {
         dialogContent.setVisible(false);
         actionPanel.setVisible(false);

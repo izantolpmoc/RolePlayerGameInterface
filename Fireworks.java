@@ -16,7 +16,7 @@ public class Fireworks extends Weapon {
     }
 
     public String ascii_art() {
-        return "                       (\r\n"
+        return    "                       (\r\n"
                 + "      __________       )\\\r\n"
                 + "     /         /\\______{,}\r\n"
                 + "     \\_________\\/\r\n"

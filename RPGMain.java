@@ -1,6 +1,4 @@
 import javax.swing.*;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +36,6 @@ public class RPGMain {
         window.getContentPane().setBackground(Color.black);
         window.setLayout(null);
         window.setVisible(true);
-        //Container container = window.getContentPane();
 
         titlePanel = new JPanel();
         JLabel titlePanelLabel = new JLabel("Paris Survival");
@@ -56,184 +53,22 @@ public class RPGMain {
         startBtn.setBackground(Color.black);
         startBtn.setForeground(Color.white);
         startBtn.setFont(normalFont);
+        //starts the game onclick of main button
         startBtn.addActionListener(e -> InitGame());
 
         startBtnPanel.add(startBtn);
 
-        //container.add(titlePanel);
-        //container.add(startBtnPanel);
         window.add(startBtnPanel);
         window.add(titlePanel);
 
     }
 
-    public void YvanDialog2(String[] dialog) {
-        timesClicked = 0;
-        promptPanel.setVisible(false);
-        actionPanel.setVisible(true);
-
-        JButton skipBtn = new JButton("Suivant");
-        createActionButton(skipBtn);
-        dialogContent.setText(dialog[0]);
-        skipBtn.addActionListener(e -> {
-            timesClicked ++;
-            if (timesClicked < dialog.length)
-                dialogContent.setText(dialog[timesClicked]);
-            else {
-                ChooseGender();
-                actionPanel.remove(skipBtn);
-            }
-        });
-
-        //container.add(dialogPanel);
-    }
-    public void YvanDialog3() {
-        actionPanel.setVisible(true);
-
-        var dialog = new String[]{
-                "Yvan: Ah oui d'accord ça ne rigole pas!",
-                "Yvan: Bon écoute, je ne peux pas rester plus longtemps et tous les transports sont en grève aujourd'hui.",
-                "Yvan: Si tu veux rentrer chez toi je te suggère d'aller en haut à droite de cette carte, là où il y a un drapeau. \n" +
-                        "Tu y trouveras surement des chauffeurs et pour 50€ tu devrais pouvoir obtenir une course!",
-                "Yvan: Ce n'est pas grand chose mais je veux bien te donner ces 5€ et la carte.\n\n",
-                "Yvan: Bon courage, " + playerName +"."
-        };
-        timesClicked = 0;
-        JButton skipBtn = new JButton("Suivant");
-        createActionButton(skipBtn);
-
-
-        dialogContent.setText(dialog[0]);
-        skipBtn.addActionListener(e -> {
-            timesClicked ++;
-            if(timesClicked == 2) {
-                mapPanel = new JPanel();
-                mapPanel.setBounds(875, 510, 400, 300);
-                mapPanel.setBackground(Color.white);
-                mapPanel.setForeground(Color.white);
-
-                map = new Map();
-                mapContent = new JTextArea(map.print2D());
-                mapContent.setEditable(false);
-                mapContent.setFont(normalFont);
-                mapPanel.add(mapContent);
-                window.add(mapPanel);
-            }
-            if (timesClicked < dialog.length) {
-                dialogContent.setText(dialog[timesClicked]);
-                if (timesClicked == 3) {
-                    dialogContent.setText(dialogContent.getText() + player.Additem(map));
-                    dialogContent.setText((dialogContent.getText() + player.ReceiveMoney(5)));
-                }
-            }
-            else {
-                startGame();
-                actionPanel.remove(skipBtn);
-            }
-        });
-    }
-
-    public void ChooseGender() {
-        dialogContent.setText("Yvan vous aide à vos redresser et vous offre de l'eau. Il semble vous regarder avec curiosité. Vous lui parlez: \n \n");
-        dialogContent.setText(dialogContent.getText() + "1- Merci pour ton aide Yvan, à vrai dire je ne sais pas comment je me suis retrouvée seule ici \n");
-        dialogContent.setText(dialogContent.getText() + "2 - Merci pour ton aide Yvan, à vrai dire je ne sais pas comment je me suis retrouvé seul ici \n");
-        dialogContent.setText(dialogContent.getText() + "3- Merci pour ton aide Yvan, à vrai dire je ne sais pas ce que je fiche ici");
-        firstChoice = new JButton("1- [femme]");
-        createActionButton(firstChoice);
-        firstChoice.setActionCommand("firstChoice");
-
-        secondChoice = new JButton("2- [homme]");
-        createActionButton(secondChoice);
-        secondChoice.setActionCommand("secondChoice");
-
-        thirdChoice = new JButton("3- [autre]");
-        createActionButton(thirdChoice);
-        thirdChoice.setActionCommand("thirdChoice");
-
-        firstChoice.addActionListener(new GenderAction());
-        secondChoice.addActionListener(new GenderAction());
-        thirdChoice.addActionListener(new GenderAction());
-
-    }
-    public void ChooseName() {
-        actionPanel.setVisible(false);
-
-        promptPanel = new JPanel();
-        promptPanel.setBounds(400, 450, 500, 50);
-        promptPanel.setBackground(Color.black);
-        promptPanel.setForeground(Color.white);
-        promptPanel.setLayout(new GridLayout(1, 2));
-
-
-
-        dialogContent.setText("Vous sortez d'un sommeil très profond avec un mal de crâne terrible. L'inconnu vous demande comment vous vous appelez. Que répondez-vous ?");
-        username = new JTextField();
-        username.setBackground(Color.black);
-        username.setForeground(Color.white);
-        username.setFont(normalFont);
-
-        JButton validateBtn = new JButton("Valider");
-        validateBtn.setBackground(Color.black);
-        validateBtn.setForeground(Color.white);
-        validateBtn.setFont(normalFont);
-
-
-        validateBtn.addActionListener(e -> {
-                playerName = username.getText();
-                var YvanDialog2 = new String[]{
-                        "X : Enchanté " + playerName + ", en tout cas tu es vraiment dans un sale état !",
-                        "X : Moi c'est Yvan."
-                };
-                YvanDialog2(YvanDialog2);
-        });
-
-        promptPanel.add(username);
-        promptPanel.add(validateBtn);
-        window.add(promptPanel);
-    }
-
-    public void ChooseClass() {
-        actionPanel.setVisible(true);
-
-        dialogContent.setText("Yvan: Je vois, et qu'est ce que tu fais dans la vie ?");
-        firstChoice = new JButton("étudiant");
-        createActionButton(firstChoice);
-        firstChoice.setActionCommand("firstChoice");
-
-        secondChoice = new JButton("homme d'affaires");
-        createActionButton(secondChoice);
-        secondChoice.setActionCommand("secondChoice");
-
-        thirdChoice = new JButton("homme politique");
-        createActionButton(thirdChoice);
-        thirdChoice.setActionCommand("thirdChoice");
-
-        fourthChoice = new JButton("sportif des JO de Paris");
-        createActionButton(fourthChoice);
-        fourthChoice.setActionCommand("fourthChoice");
-
-        fifthChoice = new JButton("touriste");
-        createActionButton(fifthChoice);
-        fifthChoice.setActionCommand("fifthChoice");
-
-        if(playerGender == Gender.FEMALE) {
-            firstChoice.setText("étudiante");
-            secondChoice.setText("femme d'affaires");
-            thirdChoice.setText("femme politique");
-        }
-
-        actionPanel.setLayout(new GridLayout(5, 1));
-        firstChoice.addActionListener(new ClassAction());
-        secondChoice.addActionListener(new ClassAction());
-        thirdChoice.addActionListener(new ClassAction());
-        fourthChoice.addActionListener(new ClassAction());
-        fifthChoice.addActionListener(new ClassAction());
-    }
-
     public void InitGame() {
+        //hides home screen
         titlePanel.setVisible(false);
         startBtnPanel.setVisible(false);
 
+        //Main game interface Layout definition
         dialogPanel = new JPanel();
         dialogPanel.setBounds(100, 100, 1050, 250);
         dialogPanel.setBackground(Color.black);
@@ -290,35 +125,18 @@ public class RPGMain {
 
 
         choice1 = new JButton();
-        //createActionButton(choice1);
-
         choice2 = new JButton();
-        //createActionButton(choice2);
-
         choice3 = new JButton();
-        //createActionButton(choice3);
-
         choice4 = new JButton();
-        //createActionButton(choice4);
-
         choice5 = new JButton();
-        //createActionButton(choice5);
-
         choice6 = new JButton();
-        //createActionButton(choice6);
 
         window.add(dialogPanel);
         window.add(actionPanel);
         window.add(playerPanel);
         playerPanel.setVisible(false);
 
-        //choice1.setVisible(false);
-        //choice2.setVisible(false);
-        //choice3.setVisible(false);
-        //choice4.setVisible(false);
-        //choice5.setVisible(false);
-        //choice6.setVisible(false);
-
+        //First dialog content
         var YvanDialog = new String[]{
                 "X : ET MERDE ",
                 "X : Sur quoi j'ai encore trébuché moi...",
@@ -326,9 +144,11 @@ public class RPGMain {
                 "X : Tiens, c'est bizarre quand même je n'ai pas l'impression de l'avoir déjà vu dans le coin..."
         };
 
+        //Dialog skip button
         JButton skipBtn = new JButton("Suivant");
         createActionButton(skipBtn);
 
+        //Displays first dialog dynamically and then asks for user's name
         dialogContent.setText(YvanDialog[0]);
         skipBtn.addActionListener(e -> {
             timesClicked ++;
@@ -341,37 +161,179 @@ public class RPGMain {
         });
     }
 
+    public void ChooseName() {
+        actionPanel.setVisible(false);
+
+        promptPanel = new JPanel();
+        promptPanel.setBounds(400, 450, 500, 50);
+        promptPanel.setBackground(Color.black);
+        promptPanel.setForeground(Color.white);
+        promptPanel.setLayout(new GridLayout(1, 2));
+
+        dialogContent.setText("Vous sortez d'un sommeil très profond avec un mal de crâne terrible. L'inconnu vous demande comment vous vous appelez. Que répondez-vous ?");
+        username = new JTextField();
+        username.setBackground(Color.black);
+        username.setForeground(Color.white);
+        username.setFont(normalFont);
+
+        JButton validateBtn = new JButton("Valider");
+        validateBtn.setBackground(Color.black);
+        validateBtn.setForeground(Color.white);
+        validateBtn.setFont(normalFont);
+
+        //On validate, sets the username and then displays 2nd dialog
+        validateBtn.addActionListener(e -> {
+            playerName = username.getText();
+            var YvanDialog2 = new String[]{
+                    "X : Enchanté " + playerName + ", en tout cas tu es vraiment dans un sale état !",
+                    "X : Moi c'est Yvan."
+            };
+            YvanDialog2(YvanDialog2);
+        });
+
+        promptPanel.add(username);
+        promptPanel.add(validateBtn);
+        window.add(promptPanel);
+    }
+    public void YvanDialog2(String[] dialog) {
+        timesClicked = 0;
+        promptPanel.setVisible(false);
+        actionPanel.setVisible(true);
+
+        JButton skipBtn = new JButton("Suivant");
+        createActionButton(skipBtn);
+
+        dialogContent.setText(dialog[0]);
+        //Displays dialog content and then asks for user's gender
+        skipBtn.addActionListener(e -> {
+            timesClicked ++;
+            if (timesClicked < dialog.length)
+                dialogContent.setText(dialog[timesClicked]);
+            else {
+                ChooseGender();
+                actionPanel.remove(skipBtn);
+            }
+        });
+    }
+
+    public void ChooseGender() {
+        dialogContent.setText("Yvan vous aide à vos redresser et vous offre de l'eau. Il semble vous regarder avec curiosité. Vous lui parlez: \n \n");
+        dialogContent.setText(dialogContent.getText() + "1- Merci pour ton aide Yvan, à vrai dire je ne sais pas comment je me suis retrouvée seule ici \n");
+        dialogContent.setText(dialogContent.getText() + "2 - Merci pour ton aide Yvan, à vrai dire je ne sais pas comment je me suis retrouvé seul ici \n");
+        dialogContent.setText(dialogContent.getText() + "3- Merci pour ton aide Yvan, à vrai dire je ne sais pas ce que je fiche ici");
+        firstChoice = new JButton("1- [femme]");
+        createActionButton(firstChoice);
+        firstChoice.setActionCommand("firstChoice");
+
+        secondChoice = new JButton("2- [homme]");
+        createActionButton(secondChoice);
+        secondChoice.setActionCommand("secondChoice");
+
+        thirdChoice = new JButton("3- [autre]");
+        createActionButton(thirdChoice);
+        thirdChoice.setActionCommand("thirdChoice");
+
+        firstChoice.addActionListener(new GenderAction());
+        secondChoice.addActionListener(new GenderAction());
+        thirdChoice.addActionListener(new GenderAction());
+    }
+
+    public void ChooseClass() {
+        actionPanel.setVisible(true);
+
+        dialogContent.setText("Yvan: Je vois, et qu'est ce que tu fais dans la vie ?");
+        firstChoice = new JButton("étudiant");
+        createActionButton(firstChoice);
+        firstChoice.setActionCommand("firstChoice");
+
+        secondChoice = new JButton("homme d'affaires");
+        createActionButton(secondChoice);
+        secondChoice.setActionCommand("secondChoice");
+
+        thirdChoice = new JButton("homme politique");
+        createActionButton(thirdChoice);
+        thirdChoice.setActionCommand("thirdChoice");
+
+        fourthChoice = new JButton("sportif des JO de Paris");
+        createActionButton(fourthChoice);
+        fourthChoice.setActionCommand("fourthChoice");
+
+        fifthChoice = new JButton("touriste");
+        createActionButton(fifthChoice);
+        fifthChoice.setActionCommand("fifthChoice");
+
+        if(playerGender == Gender.FEMALE) {
+            firstChoice.setText("étudiante");
+            secondChoice.setText("femme d'affaires");
+            thirdChoice.setText("femme politique");
+        }
+
+        actionPanel.setLayout(new GridLayout(5, 1));
+        firstChoice.addActionListener(new ClassAction());
+        secondChoice.addActionListener(new ClassAction());
+        thirdChoice.addActionListener(new ClassAction());
+        fourthChoice.addActionListener(new ClassAction());
+        fifthChoice.addActionListener(new ClassAction());
+    }
+
+
+    public void YvanDialog3() {
+        actionPanel.setVisible(true);
+
+        var dialog = new String[]{
+                "Yvan: Ah oui d'accord ça ne rigole pas!",
+                "Yvan: Bon écoute, je ne peux pas rester plus longtemps et tous les transports sont en grève aujourd'hui.",
+                "Yvan: Si tu veux rentrer chez toi je te suggère d'aller en haut à droite de cette carte, là où il y a un drapeau. \n" +
+                        "Tu y trouveras surement des chauffeurs et pour 50€ tu devrais pouvoir obtenir une course!",
+                "Yvan: Ce n'est pas grand chose mais je veux bien te donner ces 5€ et la carte.\n\n",
+                "Yvan: Bon courage, " + playerName +"."
+        };
+        timesClicked = 0;
+        JButton skipBtn = new JButton("Suivant");
+        createActionButton(skipBtn);
+
+        //displays text dynamically and adds map to the frame
+        //Starts the game when all text has been displayed
+        dialogContent.setText(dialog[0]);
+        skipBtn.addActionListener(e -> {
+            timesClicked ++;
+            if(timesClicked == 2) {
+                mapPanel = new JPanel();
+                mapPanel.setBounds(875, 510, 400, 300);
+                mapPanel.setBackground(Color.white);
+                mapPanel.setForeground(Color.white);
+
+                map = new Map();
+                mapContent = new JTextArea(map.print2D());
+                mapContent.setEditable(false);
+                mapContent.setFont(normalFont);
+                mapPanel.add(mapContent);
+                window.add(mapPanel);
+            }
+            if (timesClicked < dialog.length) {
+                dialogContent.setText(dialog[timesClicked]);
+                if (timesClicked == 3) {
+                    dialogContent.setText(dialogContent.getText() + player.Additem(map));
+                    dialogContent.setText((dialogContent.getText() + player.ReceiveMoney(5)));
+                }
+            }
+            else {
+                startGame();
+                actionPanel.remove(skipBtn);
+            }
+        });
+    }
+
     public void startGame() {
         hpLabelNumber.setText(String.valueOf(player.HealthPoints));
         xpLabelNumber.setText(String.valueOf(player.XP));
         playerPanel.setVisible(true);
         actionPanel.setVisible(false);
 
+        //Displays player's possible actions and map
         move(map, player);
 
     }
-
-    public void createActionButton (JButton btn) {
-        btn.setBackground(Color.black);
-        btn.setForeground(Color.white);
-        btn.setFont(normalFont);
-        actionPanel.add(btn);
-    }
-
-    public static void slowPrint(String output) {
-        for (int i = 0; i<output.length(); i++) {
-            char c = output.charAt(i);
-            System.out.print(c);
-            try {
-                TimeUnit.MILLISECONDS.sleep(30);
-            }
-            catch (Exception e) {
-
-            }
-        }
-        System.out.println("\n");
-    }
-
 
     public void move(Map map, Player player) {
 
@@ -398,12 +360,10 @@ public class RPGMain {
             choice3.setActionCommand("3");
             choice3.addActionListener(new MoveAction());
 
-
             createActionButton(choice5);
             choice5.setText("Changer d'arme");
             choice5.setActionCommand("5");
             choice5.addActionListener(new MoveAction());
-
 
             createActionButton(choice6);
             choice6.setText("Manger");
@@ -418,6 +378,15 @@ public class RPGMain {
         dialogContent.setText(dialog);
     }
 
+    public void createActionButton (JButton btn) {
+        btn.setBackground(Color.black);
+        btn.setForeground(Color.white);
+        btn.setFont(normalFont);
+        actionPanel.add(btn);
+    }
+
+    //Sets user's gender depending on which button they clicked
+    //Displays interface to choose a class
     public class GenderAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -442,6 +411,8 @@ public class RPGMain {
         }
     }
 
+    //Sets user class
+    //Displays 3rd introduction dialog
     public class ClassAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -476,10 +447,12 @@ public class RPGMain {
         }
     }
 
+    //Displays result of user action or movement on interface
     public class MoveAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
 
+            //ends game if player died before reaching the end of the map
             if(player.HealthPoints > 0 && map.playerPos != 9)
             {
                 var chosenDirection = e.getActionCommand();

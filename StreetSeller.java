@@ -14,6 +14,8 @@ public class StreetSeller {
     protected ArrayList<Item> Inventory = new ArrayList();
 
     public JPanel Sell(Player player, JPanel actionPanel, JPanel dialogPanel, JPanel currentActionPanel) {
+
+        //REGION LAYOUT
         JPanel inventory = new JPanel();
         inventory.setVisible(false);
         inventory.setBackground(Color.black);
@@ -33,6 +35,7 @@ public class StreetSeller {
         inventory.add(inventoryContent);
         inventory.add(buttonsPanel);
         inventory.setVisible(true);
+        //END REGION
 
         String text = "";
         text += "Votre argent: " + player.Money + "€\n";
@@ -40,18 +43,17 @@ public class StreetSeller {
         inventoryContent.setText(text);
 
         for (int i = 0; i<Inventory.size(); i++) {
-            if(!(Inventory.get(i) instanceof Map))
-            {
-                JButton btn = new JButton(Inventory.get(i).Name + ": " + Inventory.get(i).Price + "€");
-                btn.setBackground(Color.black);
-                btn.setForeground(Color.white);
-                btn.setFont(new Font("Monospaced", Font.PLAIN, 18));
-                buttonsPanel.add(btn);
-                btn.addActionListener(new SellerAction(i, this, player, inventoryContent, inventory, buttonsPanel, actionPanel, dialogPanel, currentActionPanel));
 
-                if(Inventory.get(i).Price > player.Money)
-                    btn.setEnabled(false);
-            }
+            JButton btn = new JButton(Inventory.get(i).Name + ": " + Inventory.get(i).Price + "€");
+            btn.setBackground(Color.black);
+            btn.setForeground(Color.white);
+            btn.setFont(new Font("Monospaced", Font.PLAIN, 18));
+            buttonsPanel.add(btn);
+            btn.addActionListener(new SellerAction(i, this, player, inventoryContent, inventory, buttonsPanel, actionPanel, dialogPanel, currentActionPanel));
+
+            if(Inventory.get(i).Price > player.Money)
+                btn.setEnabled(false);
+
         }
         JButton btn1 = new JButton("Annuler");
         btn1.setBackground(Color.black);
@@ -71,6 +73,7 @@ public class StreetSeller {
     }
 
     public JPanel Buy(Player player, JPanel actionPanel, JPanel dialogPanel, JPanel currentActionPanel) {
+        //REGION LAYOUT
         JPanel buyInventory = new JPanel();
         buyInventory.setVisible(false);
         buyInventory.setBackground(Color.black);
@@ -94,7 +97,8 @@ public class StreetSeller {
         buyInventory.add(inventoryContent);
         buyInventory.add(scroll);
         buyInventory.setVisible(true);
-
+        //END REGION
+        
         String text = "";
         text += "Votre argent: " + player.Money + "€\n";
         text += "-------------------------\n";
@@ -102,6 +106,7 @@ public class StreetSeller {
 
 
         for (int i = 0; i < player.Inventory.size(); i++) {
+            //Displays all player's items except map
             if(!(player.Inventory.get(i) instanceof Map))
             {
                 JButton btn = new JButton(player.Inventory.get(i).Name + ": " + player.Inventory.get(i).Price + "€");

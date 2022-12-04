@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public abstract class Player {
     public Player(String username, Gender gender) {
@@ -45,6 +42,9 @@ public abstract class Player {
         return Weapon.attack(obstacle);
     }
 
+    //Player will lose an additional 10% health if they are weak to a damage type
+    //Player will lose 10% less health if they are resistant to a damage type
+    //The result (string) is displayed in the dialog panel
     public String TakeDamage(double damage, DamageType type) {
         String dialog = "";
         switch (type) {
@@ -92,7 +92,8 @@ public abstract class Player {
     public void Heal(double points) { HealthPoints += points; }
 
     public JPanel Eat(JPanel actionPanel, JPanel dialogPanel) {
-        //DOESNT WORK
+
+        //REGION LAYOUT
         JPanel inventory = new JPanel();
         inventory.setVisible(false);
         inventory.setBounds(100, 100, 1050, 300);
@@ -114,6 +115,7 @@ public abstract class Player {
         inventory.add(inventoryContent);
         inventory.add(buttonsPanel);
         inventory.setVisible(true);
+        //END REGION
 
         String dialog = "";
         if(HealthPoints >= 100)
@@ -123,10 +125,9 @@ public abstract class Player {
         dialog += "-------------------------\n\n";
         inventoryContent.setText(dialog);
 
-
-
         for (int i = 0; i<Inventory.size(); i++) {
 
+            //Displays all consumable items in player inventory
             if((Inventory.get(i) instanceof Consumable))
             {
                 JButton btn = new JButton(Inventory.get(i).Name);
@@ -169,6 +170,8 @@ public abstract class Player {
     };
 
     public JPanel ChangeWeapon(JPanel actionPanel, JPanel dialogPanel) {
+
+        //REGION LAYOUT
         JPanel inventory = new JPanel();
         inventory.setVisible(false);
         inventory.setBounds(100, 100, 1050, 300);
@@ -181,15 +184,19 @@ public abstract class Player {
         inventoryContent.setForeground(Color.white);
         inventoryContent.setFont(new Font("Monospaced", Font.PLAIN, 18));
         inventoryContent.setLineWrap(true);
-
+        
         JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setBounds(400, 450, 400, 150);
-        buttonsPanel.setBackground(Color.red);
+        buttonsPanel.setBackground(Color.black);
         buttonsPanel.setLayout(new GridLayout(6, 2));
 
+        JScrollPane scroll = new JScrollPane(buttonsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scroll.setPreferredSize(new Dimension(800, 200));
+        scroll.setVisible(true);
+
         inventory.add(inventoryContent);
-        inventory.add(buttonsPanel);
+        inventory.add(scroll);
         inventory.setVisible(true);
+        //END REGION
 
         String dialog = "";
         dialog += "Souhaitez vous changer d'arme ?\n";
@@ -197,8 +204,8 @@ public abstract class Player {
         inventoryContent.setText(dialog);
 
         for (int i = 0; i<Inventory.size(); i++) {
-            //dialog += i + " - " + Inventory.get(i).Name + ": " + Inventory.get(i).Price + "€\n";
 
+            //displays all weapons in player's inventory
             if((Inventory.get(i) instanceof Weapon))
             {
                 JButton btn = new JButton(Inventory.get(i).Name + ": " + Inventory.get(i).Price + "€");

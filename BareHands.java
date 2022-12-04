@@ -19,7 +19,7 @@ public class BareHands extends Weapon {
 
     public String ascii_art() {
         return
-                "⠀⠀⠀⠀⣠⣶⣶⣤ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣶⣶⣦⠀⠀\r\n"
+                          "⠀⠀⠀⠀⣠⣶⣶⣤ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣶⣶⣦⠀⠀\r\n"
                         + "⠀⠀⠀⠀⢿⣿⣿⣿⠀⠀⠀⢀⣀⣠⣤⣄⠀⢿⣿⣿⣿⠇⠀\r\n"
                         + "⠀⠀⠀⠀⠈⣉⣩⣥⣶⣶⣿⣿⣿⡿⠿⠋⣀⣀⣉⣉⡁⠀⠀\r\n"
                         + "⠀⠀⣠⣾⣿⣿⣿⣿⡟⠛⠋⠉⠀⣠⣴⣿⣿⣿⣿⣿⣿⣧⠀\r\n"
